@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bakery Order</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding: 50px;
+        }
+        .button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 15px 32px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 10px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        .button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <h1>Welcome to Our Bakery!</h1>
+    <p>Click on the items below to place your order:</p>
+
+    <button class="button" onclick="placeOrder('Croissant')">Order Croissant</button>
+    <button class="button" onclick="placeOrder('Baguette')">Order Baguette</button>
+    <button class="button" onclick="placeOrder('Muffin')">Order Muffin</button>
+
+    <div id="message" style="margin-top: 20px; color: green; font-weight: bold;"></div>
+
+    <script>
+        async function placeOrder(item) {
+            const order = {
+                item: item,
+                timestamp: new Date().toISOString() // Capture current timestamp
+            };
+
+            try {
+                const response = await fetch('{{BACKEND_URL}}/place-order.php', {
+					method: 'POST',
+					headers: {
+						'Content-Type': 'application/json'
+					},
+					body: JSON.stringify(order)
+				});
+
+                if (response.ok) {
+                    const result = await response.json();
+                    document.getElementById('message').textContent = result.message;
+                } else {
+                    const error = await response.json();
+                    document.getElementById('message').textContent = `Error: ${error.message}`;
+                    document.getElementById('message').style.color = 'red';
+                }
+            } catch (error) {
+                document.getElementById('message').textContent = 'Failed to place order. Please try again later.';
+                document.getElementById('message').style.color = 'red';
+            }
+        }
+    </script>
+</body>
+</html>
