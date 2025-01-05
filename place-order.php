@@ -1,8 +1,8 @@
 <?php
 // Database connection settings
-$servername = "your-rds-endpoint.amazonaws.com";
-$username = "admin";
-$password = "YourPassword";
+$servername = "{{DB_ENDPOINT}}";
+$username = "{{DB_USERNAME}}";
+$password = "{{DB_PASSWORD}}";
 $dbname = "bakery_db";
 
 // Create connection
